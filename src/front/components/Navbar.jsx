@@ -1,6 +1,13 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export const Navbar = () => {
+	const navigate = useNavigate();
+	const isAuthenticated = Boolean(sessionStorage.getItem("token"));
+
+	const logout = () => {
+		sessionStorage.removeItem("token");
+		navigate("/login");
+	};
 
 	return (
 		<nav className="navbar navbar-light bg-light">
@@ -9,9 +16,14 @@ export const Navbar = () => {
 					<span className="navbar-brand mb-0 h1">React Boilerplate</span>
 				</Link>
 				<div className="ml-auto">
-					<Link to="/demo">
-						<button className="btn btn-primary">Check the Context in action</button>
-					</Link>
+					{isAuthenticated ? (
+						<button className="btn btn-outline-danger" onClick={logout}>Cerrar sesión</button>
+					) : (
+						<>
+							<Link className="btn btn-outline-primary mr-2" to="/login">Iniciar sesión</Link>
+							<Link className="btn btn-primary" to="/signup">Registrarse</Link>
+						</>
+					)}
 				</div>
 			</div>
 		</nav>
